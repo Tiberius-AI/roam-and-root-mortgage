@@ -1961,10 +1961,23 @@
       </div>
     </header>
 
+    <!-- Mobile 3-Pane Switcher Bar (Visible on <= 860px for App-Like Mobile Ergonomics) -->
+    <nav class="bo-mobile-pane-tabs" aria-label="Back-Office Mobile View Switcher">
+      <button type="button" class="bo-mobile-tab" data-bo-mobile-pane="queue">
+        <span>📥 Threads (<strong id="boMobileThreadCount" class="tabular-nums">4</strong>)</span>
+      </button>
+      <button type="button" class="bo-mobile-tab active" data-bo-mobile-pane="timeline">
+        <span>💬 Live Chat</span>
+      </button>
+      <button type="button" class="bo-mobile-tab" data-bo-mobile-pane="summary">
+        <span>📋 1003 &amp; Cal.com</span>
+      </button>
+    </nav>
+
     <!-- 3-Pane Grid: 25% Queue | 50% Unified Timeline | 25% Live AI Loan Summary & Cal.com -->
     <div class="bo-3pane-grid">
       <!-- LEFT PANE (25%): Borrower Thread Queue -->
-      <aside class="bo-pane-queue" aria-label="Borrower Thread Queue">
+      <aside class="bo-pane-queue" id="boPaneQueue" aria-label="Borrower Thread Queue">
         <div class="bo-pane-header">
           <h3>Borrower Threads (<span id="boThreadCount" class="tabular-nums">4</span>)</h3>
           <span class="bo-badge ai">Live Sync</span>
@@ -1981,7 +1994,7 @@
       </aside>
 
       <!-- CENTER PANE (50%): Unified SMS / Web / Voice Timeline -->
-      <section class="bo-pane-timeline" aria-label="Unified Borrower Timeline">
+      <section class="bo-pane-timeline mobile-pane-active" id="boPaneTimeline" aria-label="Unified Borrower Timeline">
         <div class="bo-timeline-header">
           <div class="bo-contact-title">
             <h3 id="boCurrentName">Hannah &amp; Marcus Vance</h3>
@@ -2030,7 +2043,7 @@
       </section>
 
       <!-- RIGHT PANE (25%): Live AI Loan Summary & Cal.com MLO Dispatch Card -->
-      <aside class="bo-pane-summary" aria-label="Live AI Loan Summary and Cal.com Dispatch">
+      <aside class="bo-pane-summary" id="boPaneSummary" aria-label="Live AI Loan Summary and Cal.com Dispatch">
         <div class="bo-summary-card">
           <h4>AI Extracted 1003 Pre-Qual Summary</h4>
           <div class="bo-kv-list tabular-nums">

@@ -1339,7 +1339,30 @@ const MOBILE_SCROLL_SCRUB = false;
 
   const boThreadList = document.getElementById('boThreadList');
   const boThreadCount = document.getElementById('boThreadCount');
+  const boMobileThreadCount = document.getElementById('boMobileThreadCount');
+  const boPaneQueue = document.getElementById('boPaneQueue');
+  const boPaneTimeline = document.getElementById('boPaneTimeline');
+  const boPaneSummary = document.getElementById('boPaneSummary');
+  const boMobileTabs = document.querySelectorAll('[data-bo-mobile-pane]');
   const boCurrentName = document.getElementById('boCurrentName');
+
+  function switchBoMobilePane(paneName) {
+    boMobileTabs.forEach(function (tab) {
+      tab.classList.toggle('active', tab.getAttribute('data-bo-mobile-pane') === paneName);
+    });
+    if (boPaneQueue) boPaneQueue.classList.toggle('mobile-pane-active', paneName === 'queue');
+    if (boPaneTimeline) boPaneTimeline.classList.toggle('mobile-pane-active', paneName === 'timeline');
+    if (boPaneSummary) boPaneSummary.classList.toggle('mobile-pane-active', paneName === 'summary');
+    if (window.innerWidth <= 860) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  boMobileTabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      switchBoMobilePane(tab.getAttribute('data-bo-mobile-pane') || 'timeline');
+    });
+  });
   const boCurrentSub = document.getElementById('boCurrentSub');
   const boMessagesList = document.getElementById('boMessagesList');
   const boDraftText = document.getElementById('boDraftText');
@@ -1370,6 +1393,7 @@ const MOBILE_SCROLL_SCRUB = false;
   function renderBackofficeRoom() {
     if (!boThreadList) return;
     if (boThreadCount) boThreadCount.textContent = String(BACKOFFICE_THREADS.length);
+    if (boMobileThreadCount) boMobileThreadCount.textContent = String(BACKOFFICE_THREADS.length);
 
     boThreadList.innerHTML = '';
     const filtered = BACKOFFICE_THREADS.filter(function (t) {
@@ -1400,6 +1424,7 @@ const MOBILE_SCROLL_SCRUB = false;
       btn.addEventListener('click', function () {
         selectedBoThreadId = thread.id;
         renderBackofficeRoom();
+        switchBoMobilePane('timeline');
       });
 
       boThreadList.appendChild(btn);
@@ -1548,6 +1573,7 @@ const MOBILE_SCROLL_SCRUB = false;
       if (!current) return;
       current.mode = btn.getAttribute('data-copilot-mode') || 'AI';
       renderBackofficeRoom();
+      switchBoMobilePane('timeline');
     });
   });
 
@@ -1621,6 +1647,7 @@ const MOBILE_SCROLL_SCRUB = false;
         text: '📅 Confirmed 15-Minute Rate Lock & Pre-Approval Call for ' + slotLabel + ' with ' + current.mlo + '. Calendar invite & SMS reminder dispatched.'
       });
       renderBackofficeRoom();
+      switchBoMobilePane('timeline');
     });
   });
 
