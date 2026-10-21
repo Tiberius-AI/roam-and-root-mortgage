@@ -3069,6 +3069,40 @@ body.backoffice-active .backoffice-shell {
    12. RESPONSIVE BREAKPOINTS (1440px, 1024px, 768px, 375px)
    ========================================================================== */
 
+@media (max-width: 1220px) {
+  .brand-tag {
+    display: none;
+  }
+
+  .nav-phone-badge span {
+    display: none;
+  }
+
+  .nav-phone-badge {
+    min-width: 40px;
+    min-height: 40px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .nav-links {
+    gap: 14px;
+  }
+
+  .nav-link {
+    font-size: 0.85rem;
+  }
+
+  .nav-actions {
+    gap: 8px;
+  }
+
+  .nav-actions .btn {
+    padding: 10px 15px;
+    font-size: 0.84rem;
+  }
+}
+
 @media (max-width: 1080px) {
   .bo-3pane-grid {
     grid-template-columns: 260px 1fr 290px;
