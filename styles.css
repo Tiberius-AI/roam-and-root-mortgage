@@ -2407,7 +2407,528 @@ h1, h2, h3, h4, h5, .display-heading {
 }
 
 /* ==========================================================================
-   14. MODALS & SLIDE-OVER DRAWERS (RATE WATCH & CUSTOMIZE RATE)
+   14. 3-PANE BACK-OFFICE UNIFIED MORTGAGE CONVERSATION ROOM & TOAST
+   ========================================================================== */
+
+body.backoffice-active #clientSiteWrapper,
+body.backoffice-active .rate-alert-strip,
+body.backoffice-active .site-navbar,
+body.backoffice-active .floating-ai-launcher,
+body.backoffice-active .mobile-sticky-bar {
+  display: none !important;
+}
+
+.backoffice-shell {
+  display: none;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  background: #14191F;
+  color: #F8FAFC;
+  overflow: hidden;
+}
+
+body.backoffice-active .backoffice-shell {
+  display: flex;
+}
+
+.backoffice-topbar {
+  height: 60px;
+  background: #0F1419;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  padding: 0 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.bo-brand-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bo-brand-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #C86D51;
+  box-shadow: 0 0 0 4px rgba(200, 109, 81, 0.22);
+}
+
+.bo-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.94rem;
+  color: #F8FAFC;
+  letter-spacing: -0.01em;
+}
+
+.bo-subtitle {
+  font-size: 0.74rem;
+  color: #94A3B8;
+}
+
+.bo-routing-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 4px;
+  border-radius: var(--radius-pill);
+}
+
+.bo-route-btn {
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #CBD5E1;
+  transition: all 0.18s ease;
+}
+
+.bo-route-btn.active {
+  background: var(--accent-primary);
+  color: #FFFFFF;
+}
+
+.bo-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bo-return-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-action);
+  color: #FFFFFF;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.82rem;
+}
+
+.bo-return-btn:hover {
+  background: var(--accent-action-hover);
+}
+
+/* 3-Pane Workspace Layout (25% Queue | 50% Timeline | 25% Loan File & Cal.com) */
+.bo-3pane-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 320px 1fr 350px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Pane 1: Thread Queue */
+.bo-pane-queue {
+  background: #14191F;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.bo-pane-header {
+  padding: 16px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bo-pane-header h3 {
+  color: #F8FAFC;
+  font-size: 0.94rem;
+}
+
+.bo-filter-row {
+  display: flex;
+  gap: 6px;
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  overflow-x: auto;
+}
+
+.bo-filter-pill {
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 0.73rem;
+  font-weight: 600;
+  color: #94A3B8;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  white-space: nowrap;
+}
+
+.bo-filter-pill.active {
+  background: rgba(61, 90, 79, 0.45);
+  color: #FFFFFF;
+  border-color: #527568;
+}
+
+.bo-thread-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bo-thread-item {
+  width: 100%;
+  text-align: left;
+  padding: 13px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  color: #F8FAFC;
+  transition: all 0.16s ease;
+}
+
+.bo-thread-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.bo-thread-item.selected {
+  background: rgba(61, 90, 79, 0.28);
+  border-color: #527568;
+}
+
+.bo-thread-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.bo-thread-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #F8FAFC;
+}
+
+.bo-thread-time {
+  font-size: 0.72rem;
+  color: #94A3B8;
+}
+
+.bo-thread-program {
+  font-size: 0.76rem;
+  color: #E2E8F0;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.bo-thread-preview {
+  font-size: 0.76rem;
+  color: #94A3B8;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.4;
+}
+
+.bo-thread-badges {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.bo-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.bo-badge.ai {
+  background: rgba(61, 90, 79, 0.45);
+  color: #A7F3D0;
+}
+
+.bo-badge.draft {
+  background: rgba(200, 109, 81, 0.3);
+  color: #FDBA74;
+}
+
+.bo-badge.booked {
+  background: rgba(16, 185, 129, 0.25);
+  color: #6EE7B7;
+}
+
+/* Pane 2: Unified SMS / Web / Voice Timeline */
+.bo-pane-timeline {
+  background: #192028;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.bo-timeline-header {
+  padding: 14px 20px;
+  background: #14191F;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.bo-contact-title h3 {
+  color: #F8FAFC;
+  font-size: 1rem;
+}
+
+.bo-contact-title span {
+  font-size: 0.76rem;
+  color: #94A3B8;
+}
+
+.bo-copilot-modes {
+  display: inline-flex;
+  background: #0F1419;
+  padding: 3px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bo-copilot-btn {
+  padding: 5px 11px;
+  border-radius: var(--radius-pill);
+  font-size: 0.73rem;
+  font-weight: 600;
+  color: #94A3B8;
+}
+
+.bo-copilot-btn.active {
+  background: var(--accent-primary);
+  color: #FFFFFF;
+}
+
+.bo-messages-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bo-msg {
+  max-width: 82%;
+  padding: 12px 15px;
+  border-radius: 14px;
+  font-size: 0.87rem;
+  line-height: 1.5;
+}
+
+.bo-msg.borrower {
+  align-self: flex-start;
+  background: #242E38;
+  color: #F8FAFC;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.bo-msg.ai-reply {
+  align-self: flex-end;
+  background: rgba(61, 90, 79, 0.42);
+  border: 1px solid rgba(167, 243, 208, 0.24);
+  color: #F8FAFC;
+}
+
+.bo-msg.mlo-reply {
+  align-self: flex-end;
+  background: #C86D51;
+  color: #FFFFFF;
+}
+
+.bo-msg-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.69rem;
+  color: #94A3B8;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.bo-msg.mlo-reply .bo-msg-meta {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Barnaby AI Pending Draft Box */
+.bo-ai-draft-banner {
+  margin: 0 20px 12px;
+  padding: 13px 15px;
+  border-radius: 12px;
+  background: rgba(200, 109, 81, 0.14);
+  border: 1px solid rgba(200, 109, 81, 0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bo-draft-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #FDBA74;
+}
+
+.bo-draft-text {
+  font-size: 0.83rem;
+  color: #F8FAFC;
+  line-height: 1.45;
+}
+
+.bo-draft-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.bo-composer-bar {
+  padding: 14px 20px;
+  background: #14191F;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  gap: 10px;
+}
+
+.bo-composer-input {
+  flex: 1;
+  height: 42px;
+  padding: 0 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #1E2630;
+  color: #F8FAFC;
+  font-size: 0.86rem;
+}
+
+/* Pane 3: Live AI Loan File Summary & Cal.com MLO Dispatch */
+.bo-pane-summary {
+  background: #14191F;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 18px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.bo-summary-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 15px;
+}
+
+.bo-summary-card h4 {
+  color: #F8FAFC;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+
+.bo-kv-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  font-size: 0.81rem;
+}
+
+.bo-kv-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 6px;
+}
+
+.bo-kv-row span {
+  color: #94A3B8;
+}
+
+.bo-kv-row strong {
+  color: #F8FAFC;
+  text-align: right;
+}
+
+.bo-slot-btn {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 8px;
+  background: rgba(61, 90, 79, 0.35);
+  border: 1px solid #527568;
+  color: #F8FAFC;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: left;
+  margin-bottom: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background-color 0.15s ease;
+}
+
+.bo-slot-btn:hover {
+  background: var(--accent-primary);
+}
+
+/* Cross-Pillar Live Toast Notification when Lead is Captured */
+.cross-pillar-toast {
+  position: fixed;
+  bottom: 84px;
+  right: 24px;
+  z-index: 250;
+  background: #14191F;
+  color: #F8FAFC;
+  border: 1px solid rgba(200, 109, 81, 0.55);
+  border-radius: 16px;
+  padding: 16px 20px;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.32);
+  display: none;
+  align-items: center;
+  gap: 16px;
+  max-width: 460px;
+}
+
+.cross-pillar-toast.visible {
+  display: flex;
+}
+
+.toast-open-bo-btn {
+  padding: 9px 14px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-action);
+  color: #FFFFFF;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   15. MODALS & SLIDE-OVER DRAWERS (RATE WATCH & CUSTOMIZE RATE)
    ========================================================================== */
 
 .modal-backdrop {
@@ -2515,6 +3036,10 @@ h1, h2, h3, h4, h5, .display-heading {
    ========================================================================== */
 
 @media (max-width: 1080px) {
+  .bo-3pane-grid {
+    grid-template-columns: 260px 1fr 290px;
+  }
+
   .hero-grid {
     grid-template-columns: 1fr;
     gap: 36px;
@@ -2544,6 +3069,23 @@ h1, h2, h3, h4, h5, .display-heading {
 }
 
 @media (max-width: 860px) {
+  .bo-3pane-grid {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+
+  .backoffice-shell {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+
+  .backoffice-topbar {
+    height: auto;
+    padding: 12px 16px;
+    flex-wrap: wrap;
+  }
+
   body {
     padding-bottom: 74px;
   }

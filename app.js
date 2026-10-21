@@ -734,6 +734,19 @@ const MOBILE_SCROLL_SCRUB = false;
       if (quoteResultApr) quoteResultApr.textContent = matchedApr.toFixed(3) + '%';
       if (quoteResultPayment) quoteResultPayment.textContent = formatCurrency(monthlyPI) + '/mo';
       if (quoteInstantResult) quoteInstantResult.classList.add('visible');
+
+      pushLeadToBackoffice({
+        name: contactVal.includes('@') ? contactVal.split('@')[0] : 'Web Quote Borrower',
+        contact: contactVal,
+        purpose: selectedQuoteGoal,
+        amount: formatCurrency(rawPrice),
+        rateApr: matchedRate.toFixed(3) + '% / ' + matchedApr.toFixed(3) + '% APR',
+        payment: formatCurrency(monthlyPI) + '/mo',
+        credit: quoteCreditScore ? quoteCreditScore.options[quoteCreditScore.selectedIndex].text : '760+ (Excellent)',
+        location: 'United States (Web Quote)',
+        mlo: 'Abraham Gluck · NMLS #62257',
+        initialMessage: 'Submitted 60-Second Custom Rate Quote for ' + selectedQuoteGoal + ' on ' + formatCurrency(rawPrice) + '.'
+      });
     });
   }
 
@@ -1116,13 +1129,28 @@ const MOBILE_SCROLL_SCRUB = false;
     });
   }
 
-  // Handle Lead Capture Submissions across all 3 AI Concierge Modes
+  // Handle Lead Capture Submissions across all 3 AI Concierge Modes & Modals
   const aiInlineLeadForm = document.getElementById('aiInlineLeadForm');
   const aiInlineLeadSuccess = document.getElementById('aiInlineLeadSuccess');
   if (aiInlineLeadForm) {
     aiInlineLeadForm.addEventListener('submit', function (e) {
       e.preventDefault();
       if (aiInlineLeadSuccess) aiInlineLeadSuccess.classList.add('visible');
+      const nameVal = (document.getElementById('aiLeadName') || {}).value || 'AI Chat Borrower';
+      const phoneVal = (document.getElementById('aiLeadPhone') || {}).value || '(555) 234-5678';
+      const zipVal = (document.getElementById('aiLeadZip') || {}).value || '78701';
+      pushLeadToBackoffice({
+        name: nameVal,
+        contact: phoneVal,
+        purpose: 'AI Pre-Qual & Rate Lock',
+        amount: '$485,000 (80% LTV)',
+        rateApr: '5.990% / 6.084% APR',
+        payment: '$2,324/mo',
+        credit: '760+ (Verified Inquiry)',
+        location: 'ZIP ' + zipVal,
+        mlo: 'Abraham Gluck · NMLS #62257',
+        initialMessage: 'Hi Barnaby AI, please text my itemized Loan Estimate worksheet for ZIP ' + zipVal + '.'
+      });
     });
   }
 
@@ -1132,6 +1160,21 @@ const MOBILE_SCROLL_SCRUB = false;
     aiSmsQuoteForm.addEventListener('submit', function (e) {
       e.preventDefault();
       if (aiSmsSuccessMsg) aiSmsSuccessMsg.classList.add('visible');
+      const smsGoal = (document.getElementById('smsGoalSelect') || {}).value || '30-Yr Fixed Purchase';
+      const smsAmt = (document.getElementById('smsEstAmount') || {}).value || '$485,000';
+      const smsPhone = (document.getElementById('smsMobileNumber') || {}).value || '(555) 888-1212';
+      pushLeadToBackoffice({
+        name: 'SMS Lead (' + smsPhone + ')',
+        contact: smsPhone,
+        purpose: smsGoal.split('(')[0].trim(),
+        amount: smsAmt,
+        rateApr: '5.990% / 6.084% APR',
+        payment: '$2,324/mo',
+        credit: '740+ Tier',
+        location: 'SMS Instant Dispatch',
+        mlo: 'Alan Schtein · NMLS #2126949',
+        initialMessage: 'Requested Instant SMS Rate Sheet for ' + smsGoal + ' on ' + smsAmt + '.'
+      });
     });
   }
 
@@ -1141,8 +1184,443 @@ const MOBILE_SCROLL_SCRUB = false;
     aiCallbackForm.addEventListener('submit', function (e) {
       e.preventDefault();
       if (aiCallbackSuccessMsg) aiCallbackSuccessMsg.classList.add('visible');
+      const cbMlo = (document.getElementById('cbAdvisorSelect') || {}).value || 'Abraham Gluck · NMLS #62257';
+      const cbWin = (document.getElementById('cbWindowSelect') || {}).value || 'Immediate (5 Mins)';
+      const cbPhone = (document.getElementById('cbPhoneInput') || {}).value || '(555) 390-1122';
+      pushLeadToBackoffice({
+        name: 'Priority MLO Callback (' + cbPhone + ')',
+        contact: cbPhone,
+        purpose: 'Licensed MLO Strategy Call',
+        amount: '$550,000 Target',
+        rateApr: '5.875% / 5.982% APR',
+        payment: '$2,602/mo',
+        credit: '760+ Tier',
+        location: 'Callback Window: ' + cbWin,
+        mlo: cbMlo,
+        status: 'Booked',
+        initialMessage: 'Requested ' + cbWin + ' callback with ' + cbMlo + '.'
+      });
     });
   }
+
+  /* ==========================================================================
+     9. PILLAR 2: 3-PANE BACK-OFFICE CONVERSATION ROOM CONTROLLER
+     ========================================================================== */
+
+  const BACKOFFICE_THREADS = [
+    {
+      id: 'thr-1',
+      name: 'Hannah & Marcus Vance',
+      contact: '(512) 844-9210',
+      time: '2m ago',
+      purpose: '30-Yr Fixed Purchase',
+      amount: '$485,000 (80% LTV)',
+      rateApr: '5.875% / 5.982% APR',
+      payment: '$2,295/mo',
+      credit: '760+ (Excellent)',
+      location: 'Austin, TX 78701',
+      mlo: 'Abraham Gluck · NMLS #62257',
+      mode: 'Draft',
+      draftText:
+        'Hi Hannah! I updated your $485,000 Austin pre-approval letter at 5.875% Rate (5.982% APR) with 20% down ($2,295/mo P&I). Abraham Gluck (NMLS #62257) has signed off—would you like the PDF texted here for your Sunday offer?',
+      messages: [
+        {
+          sender: 'borrower',
+          meta: 'Hannah Vance · SMS · 10:41 AM',
+          text: 'Hi! We found a home in Austin listed at $485,000 and want to put 20% down. Can we lock the 5.875% rate we saw on your live table and get an updated pre-approval letter before 2 PM?'
+        },
+        {
+          sender: 'ai-reply',
+          meta: 'Barnaby AI Concierge · Automated Reg Z Pre-Check · 10:41 AM',
+          text: 'Hi Hannah! At $485,000 with 20% down ($388,000 loan), your Principal & Interest at 5.875% Rate (5.982% APR, 0.875 pts) is $2,295/mo over 360 months. I have prepared your updated pre-approval packet for Senior Loan Officer Abraham Gluck (NMLS #62257).'
+        }
+      ]
+    },
+    {
+      id: 'thr-2',
+      name: 'Capt. Elena Rostova, USN',
+      contact: '(619) 504-3188',
+      time: '14m ago',
+      purpose: 'VA 0%-Down Purchase',
+      amount: '$550,000 (100% LTV)',
+      rateApr: '5.490% / 5.638% APR',
+      payment: '$3,119/mo',
+      credit: '780 (Excellent)',
+      location: 'San Diego, CA 92101',
+      mlo: 'Alan Schtein · NMLS #2126949',
+      mode: 'AI',
+      draftText:
+        'Capt. Rostova, we verified your VA Certificate of Eligibility with $0 VA Funding Fee (service-connected exemption) and locked your zero-down worksheet at 5.490% Rate (5.638% APR).',
+      messages: [
+        {
+          sender: 'borrower',
+          meta: 'Capt. Elena Rostova · Web AI Dock · 10:28 AM',
+          text: 'Checking zero-down VA loan eligibility on a $550,000 purchase in San Diego. I have a 20% VA disability rating so the funding fee should be waived.'
+        },
+        {
+          sender: 'ai-reply',
+          meta: 'Barnaby AI Concierge · VA Eligibility Engine · 10:28 AM',
+          text: 'Thank you for your service, Capt. Rostova! With a 20% service-connected rating, your VA Funding Fee is 100% waived. On a $550,000 zero-down loan at 5.490% Rate (5.638% APR), your monthly P&I is $3,119/mo with $0 PMI.'
+        }
+      ]
+    },
+    {
+      id: 'thr-3',
+      name: 'David Kowalski',
+      contact: '(303) 719-4402',
+      time: '38m ago',
+      purpose: 'Rate & Term Refinance',
+      amount: '$400,000 Balance',
+      rateApr: '5.875% / 5.962% APR',
+      payment: '$2,366/mo (-$261/mo saved)',
+      credit: '750 (Very Good)',
+      location: 'Denver, CO 80202',
+      mlo: 'Alexander Flor · NMLS #1448310',
+      mode: 'Booked',
+      draftText:
+        'Hi David, confirming your 2:30 PM rate lock call with Alexander Flor (NMLS #1448310) to finalize your $261/mo refinance savings.',
+      messages: [
+        {
+          sender: 'borrower',
+          meta: 'David Kowalski · Rate Watch Alert · 10:04 AM',
+          text: 'My current mortgage is at 6.875% with $400k remaining. How much do I save dropping to 5.875%?'
+        },
+        {
+          sender: 'mlo-reply',
+          meta: 'Alexander Flor (NMLS #1448310) · SMS · 10:09 AM',
+          text: 'Hi David! Dropping from 6.875% to 5.875% (5.962% APR) cuts your P&I by $261/month ($3,132/year) with an 11-month breakeven. Looking forward to our 15-min lock call today!'
+        }
+      ]
+    },
+    {
+      id: 'thr-4',
+      name: 'Julian Mercer',
+      contact: '(917) 620-8841',
+      time: '1h ago',
+      purpose: 'Jumbo Portfolio Purchase',
+      amount: '$1,200,000 (75% LTV)',
+      rateApr: '6.125% / 6.193% APR',
+      payment: '$5,468/mo',
+      credit: '790 (Excellent)',
+      location: 'Brooklyn, NY 11249',
+      mlo: 'Abraham Gluck · NMLS #62257',
+      mode: 'AI',
+      draftText:
+        'Hi Julian, our Jumbo underwriting desk reviewed your K-1 schedule and confirmed reserve requirements for 214 Wythe Ave.',
+      messages: [
+        {
+          sender: 'borrower',
+          meta: 'Julian Mercer · Web Customize Rate · 9:30 AM',
+          text: 'Need a $900,000 Jumbo loan on a $1.2M brownstone purchase in Brooklyn with K-1 architectural partnership income.'
+        },
+        {
+          sender: 'ai-reply',
+          meta: 'Barnaby AI Concierge · Jumbo Desk · 9:30 AM',
+          text: 'Our Private Client Jumbo tier offers 6.125% Rate (6.193% APR) at 0.250 pts ($5,468/mo P&I) with dedicated K-1 cash-flow underwriting led by Abraham Gluck (NMLS #62257).'
+        }
+      ]
+    }
+  ];
+
+  let selectedBoThreadId = BACKOFFICE_THREADS[0].id;
+  let activeBoFilter = 'all';
+  let activeRoutingMode = 'tiberius';
+
+  const boThreadList = document.getElementById('boThreadList');
+  const boThreadCount = document.getElementById('boThreadCount');
+  const boCurrentName = document.getElementById('boCurrentName');
+  const boCurrentSub = document.getElementById('boCurrentSub');
+  const boMessagesList = document.getElementById('boMessagesList');
+  const boDraftText = document.getElementById('boDraftText');
+  const boAiDraftBanner = document.getElementById('boAiDraftBanner');
+  const boApproveDraftBtn = document.getElementById('boApproveDraftBtn');
+  const boEditDraftBtn = document.getElementById('boEditDraftBtn');
+  const boComposerForm = document.getElementById('boComposerForm');
+  const boComposerInput = document.getElementById('boComposerInput');
+  const boSumPurpose = document.getElementById('boSumPurpose');
+  const boSumAmount = document.getElementById('boSumAmount');
+  const boSumRate = document.getElementById('boSumRate');
+  const boSumPayment = document.getElementById('boSumPayment');
+  const boSumCredit = document.getElementById('boSumCredit');
+  const boSumLocation = document.getElementById('boSumLocation');
+  const boSumMlo = document.getElementById('boSumMlo');
+  const crossPillarToast = document.getElementById('crossPillarToast');
+  const toastTitle = document.getElementById('toastTitle');
+  const toastMessage = document.getElementById('toastMessage');
+  const closeToastBtn = document.getElementById('closeToastBtn');
+  const closeBackofficeBtn = document.getElementById('closeBackofficeBtn');
+
+  function getSelectedBoThread() {
+    return BACKOFFICE_THREADS.find(function (t) {
+      return t.id === selectedBoThreadId;
+    }) || BACKOFFICE_THREADS[0];
+  }
+
+  function renderBackofficeRoom() {
+    if (!boThreadList) return;
+    if (boThreadCount) boThreadCount.textContent = String(BACKOFFICE_THREADS.length);
+
+    boThreadList.innerHTML = '';
+    const filtered = BACKOFFICE_THREADS.filter(function (t) {
+      if (activeBoFilter === 'all') return true;
+      return t.mode === activeBoFilter;
+    });
+
+    filtered.forEach(function (thread) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'bo-thread-item' + (thread.id === selectedBoThreadId ? ' selected' : '');
+      const lastMsg = thread.messages[thread.messages.length - 1];
+      const badgeClass = thread.mode === 'Draft' ? 'draft' : thread.mode === 'Booked' ? 'booked' : 'ai';
+      const badgeLabel = thread.mode === 'Draft' ? 'Needs MLO Approval' : thread.mode === 'Booked' ? 'Call Booked' : 'AI Autopilot';
+
+      btn.innerHTML =
+        '<div class="bo-thread-top">' +
+          '<span class="bo-thread-name">' + thread.name + '</span>' +
+          '<span class="bo-thread-time tabular-nums">' + thread.time + '</span>' +
+        '</div>' +
+        '<div class="bo-thread-program tabular-nums">' + thread.purpose + ' · ' + thread.amount + '</div>' +
+        '<div class="bo-thread-preview">' + (lastMsg ? lastMsg.text : '') + '</div>' +
+        '<div class="bo-thread-badges">' +
+          '<span class="bo-badge ' + badgeClass + '">' + badgeLabel + '</span>' +
+          '<span class="bo-badge ai tabular-nums">' + thread.rateApr.split('/')[0].trim() + '</span>' +
+        '</div>';
+
+      btn.addEventListener('click', function () {
+        selectedBoThreadId = thread.id;
+        renderBackofficeRoom();
+      });
+
+      boThreadList.appendChild(btn);
+    });
+
+    const current = getSelectedBoThread();
+    if (!current) return;
+
+    if (boCurrentName) boCurrentName.textContent = current.name;
+    if (boCurrentSub) {
+      boCurrentSub.textContent = current.contact + ' · ' + current.purpose + ' · ' + current.location;
+    }
+
+    document.querySelectorAll('[data-copilot-mode]').forEach(function (modeBtn) {
+      modeBtn.classList.toggle('active', modeBtn.getAttribute('data-copilot-mode') === current.mode);
+    });
+
+    if (boMessagesList) {
+      boMessagesList.innerHTML = '';
+      current.messages.forEach(function (m) {
+        const div = document.createElement('div');
+        div.className = 'bo-msg ' + m.sender;
+        div.innerHTML =
+          '<div class="bo-msg-meta"><span>' + m.meta + '</span></div>' +
+          '<div>' + m.text + '</div>';
+        boMessagesList.appendChild(div);
+      });
+      boMessagesList.scrollTop = boMessagesList.scrollHeight;
+    }
+
+    if (boDraftText && boAiDraftBanner) {
+      if (current.draftText) {
+        boAiDraftBanner.style.display = 'flex';
+        boDraftText.textContent = '"' + current.draftText + '"';
+      } else {
+        boAiDraftBanner.style.display = 'none';
+      }
+    }
+
+    if (boSumPurpose) boSumPurpose.textContent = current.purpose;
+    if (boSumAmount) boSumAmount.textContent = current.amount;
+    if (boSumRate) boSumRate.textContent = current.rateApr;
+    if (boSumPayment) boSumPayment.textContent = current.payment;
+    if (boSumCredit) boSumCredit.textContent = current.credit;
+    if (boSumLocation) boSumLocation.textContent = current.location;
+    if (boSumMlo) boSumMlo.textContent = current.mlo;
+  }
+
+  function pushLeadToBackoffice(lead) {
+    const newId = 'thr-' + (Date.now() % 100000);
+    const newThread = {
+      id: newId,
+      name: lead.name || 'New Web Borrower',
+      contact: lead.contact || '(555) 234-5678',
+      time: 'Just now',
+      purpose: lead.purpose || '30-Yr Fixed Purchase',
+      amount: lead.amount || '$485,000',
+      rateApr: lead.rateApr || '5.990% / 6.084% APR',
+      payment: lead.payment || '$2,324/mo',
+      credit: lead.credit || '760+ (Excellent)',
+      location: lead.location || 'United States',
+      mlo: lead.mlo || 'Abraham Gluck · NMLS #62257',
+      mode: lead.status || 'Draft',
+      draftText:
+        'Hi ' + (lead.name || 'there') + '! Here is your itemized Roam & Root worksheet for ' +
+        (lead.purpose || 'your home loan') + ' at ' + (lead.rateApr || '5.990% Rate (6.084% APR)') +
+        ' (' + (lead.payment || '$2,324/mo') + '). Would you like a 10-minute call with ' +
+        (lead.mlo || 'Abraham Gluck (NMLS #62257)') + ' to lock this tier?',
+      messages: [
+        {
+          sender: 'borrower',
+          meta: (lead.name || 'Borrower') + ' · Web/SMS Lead Capture · Just now',
+          text: lead.initialMessage || 'Requested custom mortgage rate breakdown.'
+        },
+        {
+          sender: 'ai-reply',
+          meta: 'Barnaby AI Concierge · Instant Reg Z Rate Sheet · Just now',
+          text:
+            'Matched Scenario: ' + (lead.rateApr || '5.990% / 6.084% APR') +
+            ' with estimated Principal & Interest of ' + (lead.payment || '$2,324/mo') +
+            '. Routed to ' + (activeRoutingMode === 'tiberius' ? 'My Accounts (Tiberius)' : 'Roam & Root MLO Desk') + '.'
+        }
+      ]
+    };
+
+    BACKOFFICE_THREADS.unshift(newThread);
+    selectedBoThreadId = newId;
+    renderBackofficeRoom();
+
+    if (toastTitle) {
+      toastTitle.textContent =
+        'AI Lead Captured → ' + (activeRoutingMode === 'tiberius' ? 'My Accounts (Tiberius)' : 'Roam & Root MLO Desk');
+    }
+    if (toastMessage) {
+      toastMessage.textContent =
+        'Added ' + newThread.name + ' (' + newThread.purpose + ' · ' + newThread.rateApr + ') to 3-Pane Conversation Room.';
+    }
+    if (crossPillarToast) {
+      crossPillarToast.classList.add('visible');
+    }
+  }
+
+  function openBackofficeView() {
+    document.body.classList.add('backoffice-active');
+    if (crossPillarToast) crossPillarToast.classList.remove('visible');
+    closeAiConcierge();
+    renderBackofficeRoom();
+  }
+
+  function closeBackofficeView() {
+    document.body.classList.remove('backoffice-active');
+    if (window.location.hash === '#backoffice') {
+      history.replaceState(null, '', window.location.pathname);
+    }
+  }
+
+  document.querySelectorAll('[data-open-backoffice]').forEach(function (btn) {
+    btn.addEventListener('click', openBackofficeView);
+  });
+
+  if (closeBackofficeBtn) {
+    closeBackofficeBtn.addEventListener('click', closeBackofficeView);
+  }
+
+  if (closeToastBtn && crossPillarToast) {
+    closeToastBtn.addEventListener('click', function () {
+      crossPillarToast.classList.remove('visible');
+    });
+  }
+
+  // Filter Pills in Left Pane
+  document.querySelectorAll('[data-bo-filter]').forEach(function (pill) {
+    pill.addEventListener('click', function () {
+      activeBoFilter = pill.getAttribute('data-bo-filter') || 'all';
+      document.querySelectorAll('[data-bo-filter]').forEach(function (p) {
+        p.classList.toggle('active', p === pill);
+      });
+      renderBackofficeRoom();
+    });
+  });
+
+  // Co-Pilot Mode Buttons in Center Pane
+  document.querySelectorAll('[data-copilot-mode]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const current = getSelectedBoThread();
+      if (!current) return;
+      current.mode = btn.getAttribute('data-copilot-mode') || 'AI';
+      renderBackofficeRoom();
+    });
+  });
+
+  // Phase 1 (Tiberius) vs Phase 2 (Client) Routing Toggle
+  document.querySelectorAll('[data-route-mode]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      activeRoutingMode = btn.getAttribute('data-route-mode') || 'tiberius';
+      document.querySelectorAll('[data-route-mode]').forEach(function (b) {
+        b.classList.toggle('active', b === btn);
+      });
+      const labelEl = document.getElementById('boActiveRoutingLabel');
+      if (labelEl) {
+        labelEl.textContent =
+          activeRoutingMode === 'tiberius'
+            ? 'Phase 1 · My Accounts (Tiberius)'
+            : 'Phase 2 · Roam & Root MLO Desk';
+      }
+    });
+  });
+
+  if (boApproveDraftBtn) {
+    boApproveDraftBtn.addEventListener('click', function () {
+      const current = getSelectedBoThread();
+      if (!current || !current.draftText) return;
+      current.messages.push({
+        sender: 'mlo-reply',
+        meta: current.mlo + ' · Approved AI SMS · Just now',
+        text: current.draftText
+      });
+      current.draftText = '';
+      current.mode = 'AI';
+      renderBackofficeRoom();
+    });
+  }
+
+  if (boEditDraftBtn) {
+    boEditDraftBtn.addEventListener('click', function () {
+      const current = getSelectedBoThread();
+      if (!current || !current.draftText || !boComposerInput) return;
+      boComposerInput.value = current.draftText;
+      boComposerInput.focus();
+    });
+  }
+
+  if (boComposerForm) {
+    boComposerForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!boComposerInput || !boComposerInput.value.trim()) return;
+      const current = getSelectedBoThread();
+      if (!current) return;
+      current.messages.push({
+        sender: 'mlo-reply',
+        meta: current.mlo + ' · Direct SMS · Just now',
+        text: boComposerInput.value.trim()
+      });
+      boComposerInput.value = '';
+      renderBackofficeRoom();
+    });
+  }
+
+  // 1-Click Cal.com Strategy Call Slot Dispatch
+  document.querySelectorAll('[data-book-slot]').forEach(function (slotBtn) {
+    slotBtn.addEventListener('click', function () {
+      const slotLabel = slotBtn.getAttribute('data-book-slot') || 'Today · 2:30 PM EST';
+      const current = getSelectedBoThread();
+      if (!current) return;
+      current.mode = 'Booked';
+      current.messages.push({
+        sender: 'ai-reply',
+        meta: 'Cal.com + Barnaby AI Dispatch · Verified Appointment · Just now',
+        text: '📅 Confirmed 15-Minute Rate Lock & Pre-Approval Call for ' + slotLabel + ' with ' + current.mlo + '. Calendar invite & SMS reminder dispatched.'
+      });
+      renderBackofficeRoom();
+    });
+  });
+
+  if (window.location.hash === '#backoffice') {
+    openBackofficeView();
+  }
+  window.addEventListener('hashchange', function () {
+    if (window.location.hash === '#backoffice') {
+      openBackofficeView();
+    }
+  });
 
   /* ==========================================================================
      INITIALIZE PAGE STATE & START DAMPED R-A-F LOOP
@@ -1150,6 +1628,7 @@ const MOBILE_SCROLL_SCRUB = false;
 
   updateHeroSnapshot();
   renderRatesTable();
+  renderBackofficeRoom();
   evaluateMobileScrollMode();
   updateTargetScrollProgress();
   updateFloatingLauncherVisibility();

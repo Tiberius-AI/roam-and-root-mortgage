@@ -167,6 +167,7 @@
     </div>
   </header>
 
+  <div id="clientSiteWrapper">
   <main>
     <!-- ======================================================================
          3. CALM EDITORIAL HERO SECTION ("A Calmer Breed of Mortgage")
@@ -1573,10 +1574,14 @@
           <a href="#quote-calculator">Privacy &amp; CCPA Notice</a>
           <a href="#quote-calculator">Consumer Grievance Policy</a>
           <a href="#quote-calculator">ADA Accessibility Statement</a>
+          <button type="button" class="rate-alert-trigger" data-open-backoffice="true" style="font-size: 0.76rem; padding: 4px 12px;">
+            Open 3-Pane MLO Back-Office Room →
+          </button>
         </div>
       </div>
     </div>
   </footer>
+  </div>
 
   <!-- ========================================================================
        11. INTERACTIVE MODALS: RATE DROP ALERT & CUSTOMIZE RATE DRAWER
@@ -1729,7 +1734,12 @@
               <span>Educational Rate &amp; Pre-Qual Assistant · NMLS #2489102</span>
             </div>
           </div>
-          <button type="button" class="modal-close-btn" id="closeAiDrawerBtn" aria-label="Close AI Concierge" style="position: static;">✕</button>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button type="button" class="rate-alert-trigger" data-open-backoffice="true" style="font-size: 0.72rem; padding: 4px 10px;">
+              3-Pane Back-Office →
+            </button>
+            <button type="button" class="modal-close-btn" id="closeAiDrawerBtn" aria-label="Close AI Concierge" style="position: static;">✕</button>
+          </div>
         </div>
 
         <!-- 3-Mode Switcher: AI Rate Chat | SMS Rate Sheet | Licensed MLO Callback -->
@@ -1900,6 +1910,186 @@
       </div>
     </div>
   </div>
+
+  <!-- ========================================================================
+       14. CROSS-PILLAR TOAST NOTIFICATION (CLIENT LEAD → BACK-OFFICE ROOM)
+       ======================================================================== -->
+  <div class="cross-pillar-toast" id="crossPillarToast" role="status" aria-live="polite">
+    <div style="flex: 1;">
+      <strong style="font-size: 0.88rem; display: block; color: #F8FAFC;" id="toastTitle">
+        AI Mortgage Lead Captured → Tiberius MLO Inbox
+      </strong>
+      <span style="font-size: 0.78rem; color: #94A3B8;" id="toastMessage">
+        Saved borrower scenario &amp; Reg Z rate worksheet to 3-Pane Conversation Room.
+      </span>
+    </div>
+    <button type="button" class="toast-open-bo-btn" data-open-backoffice="true">
+      Open 3-Pane Back-Office →
+    </button>
+    <button type="button" id="closeToastBtn" aria-label="Dismiss notification" style="color: #94A3B8; font-size: 0.9rem;">✕</button>
+  </div>
+
+  <!-- ========================================================================
+       15. PILLAR 2: 3-PANE UNIFIED MORTGAGE BACK-OFFICE CONVERSATION ROOM
+       ======================================================================== -->
+  <section class="backoffice-shell" id="backofficeShell" aria-label="3-Pane Unified Mortgage Conversation Room">
+    <!-- Top Back-Office Command Bar -->
+    <header class="backoffice-topbar">
+      <div class="bo-brand-group">
+        <span class="bo-brand-dot" aria-hidden="true"></span>
+        <div>
+          <div class="bo-title">TIBERIUS AI // ROAM &amp; ROOT MLO CONVERSATION ROOM (NMLS #2489102)</div>
+          <div class="bo-subtitle">
+            Lead Routing: <strong id="boActiveRoutingLabel" style="color: #FDBA74;">Phase 1 · My Accounts (Tiberius)</strong> · Barnaby AI + Licensed MLO Co-Pilot
+          </div>
+        </div>
+      </div>
+
+      <div class="bo-routing-toggle" role="group" aria-label="Lead Routing Destination">
+        <button type="button" class="bo-route-btn active" data-route-mode="tiberius">
+          Phase 1: My Accounts (Tiberius)
+        </button>
+        <button type="button" class="bo-route-btn" data-route-mode="client">
+          Phase 2: Roam &amp; Root MLO Desk
+        </button>
+      </div>
+
+      <div class="bo-nav-actions">
+        <button type="button" class="bo-return-btn" id="closeBackofficeBtn">
+          ← Return to Client Mortgage Site
+        </button>
+      </div>
+    </header>
+
+    <!-- 3-Pane Grid: 25% Queue | 50% Unified Timeline | 25% Live AI Loan Summary & Cal.com -->
+    <div class="bo-3pane-grid">
+      <!-- LEFT PANE (25%): Borrower Thread Queue -->
+      <aside class="bo-pane-queue" aria-label="Borrower Thread Queue">
+        <div class="bo-pane-header">
+          <h3>Borrower Threads (<span id="boThreadCount" class="tabular-nums">4</span>)</h3>
+          <span class="bo-badge ai">Live Sync</span>
+        </div>
+        <div class="bo-filter-row" role="tablist">
+          <button type="button" class="bo-filter-pill active" data-bo-filter="all">All Threads</button>
+          <button type="button" class="bo-filter-pill" data-bo-filter="AI">AI Active</button>
+          <button type="button" class="bo-filter-pill" data-bo-filter="Draft">Needs MLO Approval</button>
+          <button type="button" class="bo-filter-pill" data-bo-filter="Booked">Booked Call</button>
+        </div>
+        <div class="bo-thread-list" id="boThreadList">
+          <!-- Populated dynamically by app.js -->
+        </div>
+      </aside>
+
+      <!-- CENTER PANE (50%): Unified SMS / Web / Voice Timeline -->
+      <section class="bo-pane-timeline" aria-label="Unified Borrower Timeline">
+        <div class="bo-timeline-header">
+          <div class="bo-contact-title">
+            <h3 id="boCurrentName">Hannah &amp; Marcus Vance</h3>
+            <span id="boCurrentSub" class="tabular-nums">(512) 844-9210 · 30-Yr Fixed Purchase · Austin, TX (78701)</span>
+          </div>
+
+          <div class="bo-copilot-modes" role="group" aria-label="Barnaby AI Co-Pilot Mode">
+            <button type="button" class="bo-copilot-btn active" data-copilot-mode="AI">AI Autopilot</button>
+            <button type="button" class="bo-copilot-btn" data-copilot-mode="Draft">Draft for MLO</button>
+            <button type="button" class="bo-copilot-btn" data-copilot-mode="Human">Licensed MLO Only</button>
+          </div>
+        </div>
+
+        <div class="bo-messages-list" id="boMessagesList">
+          <!-- Populated dynamically by app.js -->
+        </div>
+
+        <!-- Pending AI Draft Approval Card -->
+        <div class="bo-ai-draft-banner" id="boAiDraftBanner">
+          <div class="bo-draft-top">
+            <span>✨ BARNABY AI SUGGESTED SMS DRAFT (REG Z &amp; SAFE ACT VERIFIED)</span>
+            <span>Assigned MLO: Abraham Gluck (NMLS #62257)</span>
+          </div>
+          <p class="bo-draft-text" id="boDraftText">
+            "Hi Hannah! I updated your $485,000 Austin pre-approval letter at 5.875% Rate (5.982% APR) with 20% down ($2,295/mo P&amp;I). Abraham Gluck (NMLS #62257) has signed off—would you like the PDF texted here for your Sunday offer?"
+          </p>
+          <div class="bo-draft-actions">
+            <button type="button" class="btn btn-primary btn-sm" id="boApproveDraftBtn">
+              ✓ Approve &amp; Send SMS
+            </button>
+            <button type="button" class="btn btn-outline btn-sm" id="boEditDraftBtn" style="color: #F8FAFC; border-color: rgba(255,255,255,0.2); background: transparent;">
+              Edit in Composer
+            </button>
+          </div>
+        </div>
+
+        <form class="bo-composer-bar" id="boComposerForm">
+          <input
+            type="text"
+            id="boComposerInput"
+            class="bo-composer-input"
+            placeholder="Reply via SMS/Web as Licensed Loan Officer Abraham Gluck (NMLS #62257)..."
+          />
+          <button type="submit" class="btn btn-primary btn-sm">Send SMS</button>
+        </form>
+      </section>
+
+      <!-- RIGHT PANE (25%): Live AI Loan Summary & Cal.com MLO Dispatch Card -->
+      <aside class="bo-pane-summary" aria-label="Live AI Loan Summary and Cal.com Dispatch">
+        <div class="bo-summary-card">
+          <h4>AI Extracted 1003 Pre-Qual Summary</h4>
+          <div class="bo-kv-list tabular-nums">
+            <div class="bo-kv-row">
+              <span>Loan Purpose</span>
+              <strong id="boSumPurpose">30-Yr Fixed Purchase</strong>
+            </div>
+            <div class="bo-kv-row">
+              <span>Est. Price / Balance</span>
+              <strong id="boSumAmount">$485,000 (80% LTV)</strong>
+            </div>
+            <div class="bo-kv-row">
+              <span>Quoted Rate &amp; APR</span>
+              <strong id="boSumRate" style="color: #6EE7B7;">5.875% / 5.982% APR</strong>
+            </div>
+            <div class="bo-kv-row">
+              <span>Est. Monthly P&amp;I</span>
+              <strong id="boSumPayment">$2,295/mo</strong>
+            </div>
+            <div class="bo-kv-row">
+              <span>Credit Score Tier</span>
+              <strong id="boSumCredit">760+ (Excellent)</strong>
+            </div>
+            <div class="bo-kv-row">
+              <span>Property Location</span>
+              <strong id="boSumLocation">Austin, TX 78701</strong>
+            </div>
+            <div class="bo-kv-row">
+              <span>Assigned MLO</span>
+              <strong id="boSumMlo">Abraham Gluck · NMLS #62257</strong>
+            </div>
+            <div class="bo-kv-row">
+              <span>TCPA 1-to-1 Consent</span>
+              <strong style="color: #6EE7B7;">✓ Verified Opt-In</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="bo-summary-card">
+          <h4>1-Click Cal.com MLO Strategy Call</h4>
+          <p style="font-size: 0.76rem; color: #94A3B8; margin-bottom: 10px;">
+            Dispatch an instant Cal.com 15-minute rate lock &amp; pre-approval review onto this borrower thread:
+          </p>
+          <button type="button" class="bo-slot-btn" data-book-slot="Today · 2:30 PM EST (15-Min Rate Lock Call)">
+            <span>📅 Today · 2:30 PM EST</span>
+            <span style="color: #6EE7B7;">Book Slot →</span>
+          </button>
+          <button type="button" class="bo-slot-btn" data-book-slot="Today · 4:15 PM EST (Pre-Approval Review)">
+            <span>📅 Today · 4:15 PM EST</span>
+            <span style="color: #6EE7B7;">Book Slot →</span>
+          </button>
+          <button type="button" class="bo-slot-btn" data-book-slot="Tomorrow · 10:00 AM EST (MLO Structuring)">
+            <span>📅 Tomorrow · 10:00 AM EST</span>
+            <span style="color: #6EE7B7;">Book Slot →</span>
+          </button>
+        </div>
+      </aside>
+    </div>
+  </section>
 
   <script src="app.js"></script>
 </body>
