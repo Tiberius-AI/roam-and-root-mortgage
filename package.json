@@ -1,0 +1,10 @@
+{
+  "name": "roam-and-root-mortgage",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Roam & Root Home Loans — Editorial Mortgage Platform with Pinned Horizontal-Scroll VW & Dog Journey",
+  "scripts": {
+    "dev": "node -e \"const http=require('http'),fs=require('fs'),path=require('path');http.createServer((q,r)=>{const f=path.join(process.cwd(),q.url==='/'?'index.html':q.url.split('?')[0]);if(!fs.existsSync(f)){r.writeHead(404);return r.end();}r.end(fs.readFileSync(f));}).listen(8090,()=>console.log('http://localhost:8090'))\"",
+    "build": "node -e \"const fs=require('fs');fs.mkdirSync('dist',{recursive:true});for(const f of ['index.html','styles.css','app.js']){fs.copyFileSync(f,'dist/'+f);}console.log('Built static bundle to dist/');\""
+  }
+}
