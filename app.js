@@ -430,17 +430,17 @@ const MOBILE_SCROLL_SCRUB = false;
 
       const tr = document.createElement('tr');
       tr.innerHTML =
-        '<td>' +
+        '<td data-label="Loan Tier">' +
           '<div class="loan-tier-cell">' +
             '<span class="loan-tier-name">' + fullTierTitle + ' ' + badgeHtml + '</span>' +
             '<span class="loan-tier-sub">' + tier.sub + '</span>' +
           '</div>' +
         '</td>' +
-        '<td><span class="rate-num-large">' + finalRate.toFixed(3) + '%</span></td>' +
-        '<td><span class="apr-num">' + finalApr.toFixed(3) + '%</span></td>' +
-        '<td><span class="points-num">' + pointsLabel + '</span></td>' +
-        '<td><span class="payment-num">' + formatCurrency(monthlyPI) + '/mo</span></td>' +
-        '<td style="text-align: right;">' +
+        '<td data-label="Interest Rate"><span class="rate-num-large">' + finalRate.toFixed(3) + '%</span></td>' +
+        '<td data-label="APR"><span class="apr-num">' + finalApr.toFixed(3) + '%</span></td>' +
+        '<td data-label="Points / Credits"><span class="points-num">' + pointsLabel + '</span></td>' +
+        '<td data-label="Principal & Interest"><span class="payment-num">' + formatCurrency(monthlyPI) + '/mo</span></td>' +
+        '<td data-label="Action" class="rate-action-cell" style="text-align: right;">' +
           '<button type="button" class="btn btn-outline btn-sm customize-rate-btn" ' +
             'data-program="' + fullTierTitle + '" ' +
             'data-rate="' + finalRate.toFixed(3) + '%" ' +
@@ -501,6 +501,7 @@ const MOBILE_SCROLL_SCRUB = false;
      ========================================================================== */
 
   const roadProcessTrack = document.getElementById('road-ahead');
+  const roadSceneSvg = document.querySelector('.road-scene-svg');
   const vwCruiserWrapper = document.getElementById('vwCruiserWrapper');
   const vwChassisGroup = document.getElementById('vwChassisGroup');
   const wheelFront = document.getElementById('wheelFront');
@@ -524,9 +525,15 @@ const MOBILE_SCROLL_SCRUB = false;
     if (isSmallViewport && !MOBILE_SCROLL_SCRUB) {
       isMobileStatic = true;
       roadProcessTrack.classList.add('mobile-static-mode');
-      // Place VW & Dog illustration in a crisp hero pose on mobile static mode
-      if (vwCruiserWrapper) vwCruiserWrapper.setAttribute('transform', 'translate(140, 114)');
+      // Frame the SVG viewBox directly around the Vintage VW Camper & Golden Retriever Co-Pilot on mobile static mode
+      if (roadSceneSvg) {
+        roadSceneSvg.setAttribute('viewBox', '445 32 345 256');
+        roadSceneSvg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+      }
+      if (vwCruiserWrapper) vwCruiserWrapper.setAttribute('transform', 'translate(490, 114)');
       if (vwChassisGroup) vwChassisGroup.setAttribute('transform', 'translate(0, 0)');
+      if (parallaxHillsAndTrees) parallaxHillsAndTrees.setAttribute('transform', 'translate(0, 0)');
+      if (parallaxClouds) parallaxClouds.setAttribute('transform', 'translate(0, 0)');
       if (wheelFront) wheelFront.style.transform = 'rotate(0deg)';
       if (wheelRear) wheelRear.style.transform = 'rotate(0deg)';
       if (roadCardsTrack) roadCardsTrack.style.transform = 'none';
@@ -534,6 +541,10 @@ const MOBILE_SCROLL_SCRUB = false;
     } else {
       isMobileStatic = false;
       roadProcessTrack.classList.remove('mobile-static-mode');
+      if (roadSceneSvg) {
+        roadSceneSvg.setAttribute('viewBox', '0 0 1240 310');
+        roadSceneSvg.setAttribute('preserveAspectRatio', 'xMidYMid slice');
+      }
       updateTargetScrollProgress();
     }
   }
